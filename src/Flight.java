@@ -1,9 +1,13 @@
 public class Flight {
-    String number;
-    double price;
+    private String number;
+    private double price;
 
-    Flight(String number, double price) {
+    public Flight(String number, double price) {
         this.number = number;
         this.price = price;
     }
+    public String getNumber() {
+        return number;}
+    public double getPrice() {
+        return price;}
 }
