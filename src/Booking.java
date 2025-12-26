@@ -8,8 +8,9 @@ public class Booking {
     }
 
     void printInfo() {
-        System.out.println("Passenger: " + passenger.name);
+        System.out.println("Passenger: " + passenger.getName());
         System.out.println("Flight: " + flight.getNumber());
         System.out.println("Price: " + flight.getPrice());
+        System.out.println("Age: " + passenger.getAge());
     }
 }

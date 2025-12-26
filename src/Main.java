@@ -4,8 +4,8 @@ public class Main {
         Flight f1 = new Flight("KC101", 15000);
         Flight f2 = new Flight("KC202", 12000);
 
-        Passenger p1 = new Passenger("Aibek");
-        Passenger p2 = new Passenger("Dias");
+        Passenger p1 = new Passenger("Aibek",17);
+        Passenger p2 = new Passenger("Dias",18);
 
         Booking b1 = new Booking(f1, p1);
         Booking b2 = new Booking(f2, p2);
