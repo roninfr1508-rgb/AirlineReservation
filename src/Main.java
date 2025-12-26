@@ -16,6 +16,6 @@ public class Main {
         if (f1.getPrice() > f2.getPrice()) {
             System.out.println("F2 is cheaper");
         }else {System.out.println("F1 is cheaper");}
-
+         //test update
     }
 }
