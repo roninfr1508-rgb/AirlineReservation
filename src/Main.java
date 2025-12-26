@@ -17,5 +17,6 @@ public class Main {
             System.out.println("F2 is cheaper");
         }else {System.out.println("F1 is cheaper");}
          //test update
+         //test update 2
     }
 }
