@@ -88,22 +88,42 @@ public class Main {
             // Update
             String updateFlight = "UPDATE flights SET price = ? WHERE flight_id = ?";
             PreparedStatement psUpdate = conn.prepareStatement(updateFlight);
-            psUpdate.setInt(1, 17000);
-            psUpdate.setInt(2, 1); // обновляем первый рейс
+            psUpdate.setInt(2, 17000);
+            psUpdate.setInt(1, 1);
             psUpdate.executeUpdate();
 
             //Delete
             String deletePassenger = "DELETE FROM passengers WHERE passenger_id = ?";
             PreparedStatement psDelete = conn.prepareStatement(deletePassenger);
-            psDelete.setInt(1, 1); // удаляем первого пассажира
+            psDelete.setInt(1, 10);
             psDelete.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        //Для api
+        try {
+            // Запуск REST API сервера на порту 8080
+            RestApiServer server = new RestApiServer(8080);
+            server.start();
 
+            System.out.println("✅ REST API сервер запущен!");
+            System.out.println("📍 Основной адрес: http://localhost:8080");
+            System.out.println("\n📚 Доступные эндпоинты:");
+            System.out.println("   GET  http://localhost:8080/api/flights - все рейсы");
+            System.out.println("   POST http://localhost:8080/api/flights - добавить рейс");
+            System.out.println("   GET  http://localhost:8080/api/bookings - все бронирования");
+            System.out.println("   POST http://localhost:8080/api/bookings - создать бронирование");
+            System.out.println("   GET  http://localhost:8080/api/passengers - все пассажиры");
+            System.out.println("   POST http://localhost:8080/api/passengers - добавить пассажира");
+            System.out.println("   GET  http://localhost:8080/api/health - проверка сервера");
+            System.out.println("\n💡 Сервер запущен. Жми Ctrl+C для остановки.");
 
+        } catch (Exception e) {
+            System.err.println("❌ Ошибка при запуске сервера: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 
