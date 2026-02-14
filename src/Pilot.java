@@ -1,8 +1,11 @@
 public class Pilot extends Person {
-    public Pilot(String name){
+
+    public Pilot(String name) {
         super(name);
     }
-    public String getRole(){
+
+    @Override
+    public String getRole() {
         return "Pilot";
     }
 }

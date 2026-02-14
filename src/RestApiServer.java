@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import com.airline.portal.exception.InvalidData;
+import com.airline.portal.exception.ResourceNotFound;
 
 /**
  * REST API сервер для системы бронирования авиабилетов
@@ -55,7 +57,7 @@ public class RestApiServer {
     public void start() {
         server.setExecutor(null);
         server.start();
-        System.out.println("✅ REST API сервер запущен на http://localhost:" + port);
+        System.out.println("REST API сервер запущен на http://localhost:" + port);
     }
 
     /**
@@ -64,7 +66,7 @@ public class RestApiServer {
     @SuppressWarnings("unused")
     public void stop() {
         server.stop(0);
-        System.out.println("❌ REST API сервер остановлен");
+        System.out.println("REST API сервер остановлен");
     }
 
     /**
@@ -126,6 +128,7 @@ public class RestApiServer {
                 } else if ("POST".equals(method)) {
                     // POST /api/flights - добавить новый рейс
                     String requestBody = readRequestBody(exchange);
+                    // 4 ПУНТ Обработка исключений
                     try {
                         Flight flight = gson.fromJson(requestBody, Flight.class);
                         airlineService.addFlight(flight);
@@ -133,8 +136,11 @@ public class RestApiServer {
                         response.addProperty("message", "Рейс успешно добавлен");
                         response.addProperty("flightNumber", flight.getNumber());
                         sendJsonResponse(exchange, 201, gson.toJson(response));
+                    } catch (InvalidData e) {
+                        sendErrorResponse(exchange, 400, e.getMessage());
+
                     } catch (Exception e) {
-                        sendErrorResponse(exchange, 400, "Ошибка при добавлении рейса: " + e.getMessage());
+                        sendErrorResponse(exchange, 500, "Внутренняя ошибка сервера");
                     }
 
                 } else {
@@ -168,7 +174,7 @@ public class RestApiServer {
                         JsonObject jsonObject = gson.fromJson(requestBody, JsonObject.class);
                         String passengerName = jsonObject.get("passengerName").getAsString();
                         String flightNumber = jsonObject.get("flightNumber").getAsString();
-
+                     // Метод createBooking теперь выбрасывает исключения при ошибках
                         Booking booking = airlineService.createBooking(passengerName, flightNumber);
 
                         if (booking != null) {

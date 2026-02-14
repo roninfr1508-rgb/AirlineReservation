@@ -25,10 +25,10 @@ public class DBConnection {
                 pstmt.setString(1, flight.getNumber());
                 pstmt.setDouble(2, flight.getPrice());
                 pstmt.executeUpdate();
-                System.out.println("✅ Рейс сохранен в БД: " + flight.getNumber());
+                System.out.println("Рейс сохранен в БД: " + flight.getNumber());
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при сохранении рейса: " + e.getMessage());
+            System.err.println(" Ошибка при сохранении рейса: " + e.getMessage());
         }
     }
 
@@ -42,10 +42,10 @@ public class DBConnection {
                 pstmt.setDouble(1, flight.getPrice());
                 pstmt.setString(2, flight.getNumber());
                 pstmt.executeUpdate();
-                System.out.println("✅ Рейс обновлен в БД: " + flight.getNumber());
+                System.out.println(" Рейс обновлен в БД: " + flight.getNumber());
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при обновлении рейса: " + e.getMessage());
+            System.err.println("Ошибка при обновлении рейса: " + e.getMessage());
         }
     }
 
@@ -58,10 +58,10 @@ public class DBConnection {
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, flightNumber);
                 pstmt.executeUpdate();
-                System.out.println("✅ Р��йс удален из БД: " + flightNumber);
+                System.out.println("Реийс удален из БД: " + flightNumber);
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при удалении рейса: " + e.getMessage());
+            System.err.println("Ошибка при удалении рейса: " + e.getMessage());
         }
     }
 
@@ -78,10 +78,10 @@ public class DBConnection {
                 pstmt.setString(2, booking.flight.getNumber());
                 pstmt.setDouble(3, booking.flight.getPrice());
                 pstmt.executeUpdate();
-                System.out.println("✅ Бронирование сохранено в БД");
+                System.out.println("Бронирование сохранено в БД");
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при сохранении бронирования: " + e.getMessage());
+            System.err.println("Ошибка при сохранении бронирования: " + e.getMessage());
         }
     }
 
@@ -96,10 +96,10 @@ public class DBConnection {
                 pstmt.setString(2, booking.passenger.getName());
                 pstmt.setString(3, booking.flight.getNumber());
                 pstmt.executeUpdate();
-                System.out.println("✅ Бронирование обновлено в БД");
+                System.out.println("Бронирование обновлено в БД");
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при обновлении бронирования: " + e.getMessage());
+            System.err.println("Ошибка при обновлении бронирования: " + e.getMessage());
         }
     }
 
@@ -113,10 +113,10 @@ public class DBConnection {
                 pstmt.setString(1, bookingId);
                 pstmt.setString(2, bookingId);
                 pstmt.executeUpdate();
-                System.out.println("✅ Бронирование удалено из БД");
+                System.out.println("Бронирование удалено из БД");
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при удалении бронирования: " + e.getMessage());
+            System.err.println("Ошибка при удалении бронирования: " + e.getMessage());
         }
     }
 
@@ -133,10 +133,10 @@ public class DBConnection {
                 pstmt.setInt(2, passenger.getAge());
                 pstmt.setString(3, passenger.getRole());
                 pstmt.executeUpdate();
-                System.out.println("✅ Пассажир сохранен в БД: " + passenger.getName());
+                System.out.println("Пассажир сохранен в БД: " + passenger.getName());
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при сохранении пассажира: " + e.getMessage());
+            System.err.println("Ошибка при сохранении пассажира: " + e.getMessage());
         }
     }
 
@@ -151,10 +151,10 @@ public class DBConnection {
                 pstmt.setString(2, passenger.getRole());
                 pstmt.setString(3, passenger.getName());
                 pstmt.executeUpdate();
-                System.out.println("✅ Пассажир обновлен в БД: " + passenger.getName());
+                System.out.println("Пассажир обновлен в БД: " + passenger.getName());
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при обновлении пассажира: " + e.getMessage());
+            System.err.println("Ошибка при обновлении пассажира: " + e.getMessage());
         }
     }
 
@@ -167,10 +167,10 @@ public class DBConnection {
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, passengerName);
                 pstmt.executeUpdate();
-                System.out.println("✅ Пассажир удален из БД: " + passengerName);
+                System.out.println("Пассажир удален из БД: " + passengerName);
             }
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка при удалении пассажира: " + e.getMessage());
+            System.err.println("Ошибка при удалении пассажира: " + e.getMessage());
         }
     }
 }

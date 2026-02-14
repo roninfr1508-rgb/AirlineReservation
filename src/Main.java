@@ -45,6 +45,16 @@ public class Main {
         for (Passenger p : adults) {
             System.out.println(p.getName() + " - " + p.getAge());
         }
+        AirlineService service = new AirlineService();
+
+        System.out.println("Flights sorted by price:");
+
+        for (Flight flight : service.sortFlightsByPrice()) {
+            System.out.println(
+                    flight.getNumber() + " - " + flight.getPrice()
+            );
+        }
+
 
         ArrayList<Identifiable> people = new ArrayList<>();
         people.add(new Passenger("Ali",40));
@@ -108,9 +118,9 @@ public class Main {
             RestApiServer server = new RestApiServer(8080);
             server.start();
 
-            System.out.println("✅ REST API сервер запущен!");
-            System.out.println("📍 Основной адрес: http://localhost:8080");
-            System.out.println("\n📚 Доступные эндпоинты:");
+            System.out.println("REST API сервер запущен!");
+            System.out.println("Основной адрес: http://localhost:8080");
+            System.out.println("Доступные эндпоинты:");
             System.out.println("   GET  http://localhost:8080/api/flights - все рейсы");
             System.out.println("   POST http://localhost:8080/api/flights - добавить рейс");
             System.out.println("   GET  http://localhost:8080/api/bookings - все бронирования");
@@ -118,10 +128,10 @@ public class Main {
             System.out.println("   GET  http://localhost:8080/api/passengers - все пассажиры");
             System.out.println("   POST http://localhost:8080/api/passengers - добавить пассажира");
             System.out.println("   GET  http://localhost:8080/api/health - проверка сервера");
-            System.out.println("\n💡 Сервер запущен. Жми Ctrl+C для остановки.");
+            System.out.println("\nСервер запущен");
 
         } catch (Exception e) {
-            System.err.println("❌ Ошибка при запуске сервера: " + e.getMessage());
+            System.err.println("Ошибка при запуске сервера: " + e.getMessage());
             e.printStackTrace();
         }
     }

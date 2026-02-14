@@ -1,3 +1,7 @@
+import com.airline.portal.exception.InvalidData;
+import com.airline.portal.exception.ResourceNotFound;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +24,12 @@ public class AirlineService {
 
         // Инициализация примером данными
         initializeSampleData();
+    }
+    //Sorting
+    public List<Flight> sortFlightsByPrice() {
+        return flights.stream()
+                .sorted((f1, f2) -> Double.compare(f1.getPrice(), f2.getPrice()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -50,7 +60,7 @@ public class AirlineService {
     /**
      * Добавить новый рейс
      */
-    public void addFlight(Flight flight) {
+    public void addFlight(Flight flight)throws InvalidData {
         if (flight != null && !flights.contains(flight)) {
             flights.add(flight);
             // Сохраняем в БД
@@ -95,8 +105,6 @@ public class AirlineService {
      * Поиск рейсов по цене (диапазон)
      */
     public List<Flight> searchFlightsByDestination(String destination) {
-        // Так как в твоем Flight нет destination, возвращаем все рейсы
-        // Эту функцию можно доработать позже
         return new ArrayList<>(flights);
     }
 
@@ -252,10 +260,10 @@ public class AirlineService {
      */
     public String getStatistics() {
         return String.format(
-                "📊 Статистика системы:\n" +
-                        "✈️  Рейсы: %d\n" +
-                        "📝 Бронирования: %d\n" +
-                        "👥 Пассажиры: %d",
+                "Статистика системы:\n" +
+                        "Рейсы: %d\n" +
+                        "Бронирования: %d\n" +
+                        "Пассажиры: %d",
                 flights.size(),
                 bookings.size(),
                 passengers.size()
