@@ -1,3 +1,5 @@
+package com.airline.portal.domain;
+
 public abstract class Person implements Identifiable {
 
     protected String name;

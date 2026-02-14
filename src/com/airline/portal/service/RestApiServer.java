@@ -1,3 +1,8 @@
+package com.airline.portal.service;
+
+import com.airline.portal.domain.Booking;
+import com.airline.portal.domain.Flight;
+import com.airline.portal.domain.Passenger;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -112,7 +117,7 @@ public class RestApiServer {
     }
 
     /**
-     * Обработчик для рейсов (GET, POST)
+     * Обработчик для рейсов (GET, POST)  4 ПУНКТ
      */
     private class FlightsHandler implements HttpHandler {
         @Override
@@ -166,30 +171,31 @@ public class RestApiServer {
                     String response = gson.toJson(airlineService.getAllBookings());
                     sendJsonResponse(exchange, 200, response);
 
-                } else if ("POST".equals(method)) {
-                    // POST /api/bookings - создать новое бронирование
-                    String requestBody = readRequestBody(exchange);
-                    try {
-                        // Парсим JSON: { "passengerName": "...", "flightNumber": "..." }
-                        JsonObject jsonObject = gson.fromJson(requestBody, JsonObject.class);
-                        String passengerName = jsonObject.get("passengerName").getAsString();
-                        String flightNumber = jsonObject.get("flightNumber").getAsString();
-                     // Метод createBooking теперь выбрасывает исключения при ошибках
-                        Booking booking = airlineService.createBooking(passengerName, flightNumber);
+                }  else if ("POST".equals(method)) {
+                // POST /api/bookings - создать новое бронирование
+                String requestBody = readRequestBody(exchange);
+                try {
+                    // Парсим JSON: { "passengerName": "...", "flightNumber": "..." }
+                    JsonObject jsonObject = gson.fromJson(requestBody, JsonObject.class);
+                    String passengerName = jsonObject.get("passengerName").getAsString();
+                    String flightNumber = jsonObject.get("flightNumber").getAsString();
 
-                        if (booking != null) {
-                            JsonObject response = new JsonObject();
-                            response.addProperty("message", "Бронирование успешно создано");
-                            response.addProperty("passenger", booking.passenger.getName());
-                            response.addProperty("flight", booking.flight.getNumber());
-                            response.addProperty("price", booking.flight.getPrice());
-                            sendJsonResponse(exchange, 201, gson.toJson(response));
-                        } else {
-                            sendErrorResponse(exchange, 400, "Пассажир или рейс не найдены");
-                        }
-                    } catch (Exception e) {
-                        sendErrorResponse(exchange, 400, "Ошибка при создании бронирования: " + e.getMessage());
-                    }
+                    Booking booking = airlineService.createBooking(passengerName, flightNumber);
+
+                    JsonObject response = new JsonObject();
+                    response.addProperty("message", "Бронирование успешно создано");
+                    response.addProperty("passenger", booking.getPassenger().getName());
+                    response.addProperty("flight", booking.getFlight().getNumber());
+                    response.addProperty("price", booking.getFlight().getPrice());
+                    sendJsonResponse(exchange, 201, gson.toJson(response));
+                    // 4 ПУНКТ
+                } catch (InvalidData e) {
+                    sendErrorResponse(exchange, 400, "Ошибка валидации: " + e.getMessage());
+                } catch (ResourceNotFound e) {
+                    sendErrorResponse(exchange, 404, "Ресурс не найден: " + e.getMessage());
+                } catch (Exception e) {
+                    sendErrorResponse(exchange, 400, "Ошибка при создании бронирования: " + e.getMessage());
+                }
 
                 } else {
                     sendErrorResponse(exchange, 405, "Метод не поддерживается");
@@ -201,7 +207,7 @@ public class RestApiServer {
     }
 
     /**
-     * Обработчик для пассажиров (GET, POST)
+     *  4 ПУНКТ
      */
     private class PassengersHandler implements HttpHandler {
         @Override
@@ -225,6 +231,8 @@ public class RestApiServer {
                         response.addProperty("passengerName", passenger.getName());
                         response.addProperty("age", passenger.getAge());
                         sendJsonResponse(exchange, 201, gson.toJson(response));
+                    } catch (InvalidData e) {
+                        sendErrorResponse(exchange, 400, "Ошибка валидации: " + e.getMessage());
                     } catch (Exception e) {
                         sendErrorResponse(exchange, 400, "Ошибка при добавлении пассажира: " + e.getMessage());
                     }

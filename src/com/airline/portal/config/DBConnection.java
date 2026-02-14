@@ -1,3 +1,9 @@
+package com.airline.portal.config;
+
+import com.airline.portal.domain.Flight;
+import com.airline.portal.domain.Passenger;
+import com.airline.portal.domain.Booking;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -74,9 +80,9 @@ public class DBConnection {
         try (Connection conn = getConnection()) {
             String sql = "INSERT INTO bookings (passenger_name, flight_number, price) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, booking.passenger.getName());
-                pstmt.setString(2, booking.flight.getNumber());
-                pstmt.setDouble(3, booking.flight.getPrice());
+                pstmt.setString(1, booking.getPassenger().getName());
+                pstmt.setString(2, booking.getFlight().getNumber());
+                pstmt.setDouble(3, booking.getFlight().getPrice());
                 pstmt.executeUpdate();
                 System.out.println("Бронирование сохранено в БД");
             }
@@ -92,9 +98,9 @@ public class DBConnection {
         try (Connection conn = getConnection()) {
             String sql = "UPDATE bookings SET price = ? WHERE passenger_name = ? AND flight_number = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setDouble(1, booking.flight.getPrice());
-                pstmt.setString(2, booking.passenger.getName());
-                pstmt.setString(3, booking.flight.getNumber());
+                pstmt.setDouble(1, booking.getFlight().getPrice());
+                pstmt.setString(2, booking.getPassenger().getName());
+                pstmt.setString(3, booking.getFlight().getNumber());
                 pstmt.executeUpdate();
                 System.out.println("Бронирование обновлено в БД");
             }

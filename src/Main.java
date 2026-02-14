@@ -1,3 +1,8 @@
+import com.airline.portal.config.DBConnection;
+import com.airline.portal.domain.*;
+import com.airline.portal.service.AirlineService;
+import com.airline.portal.service.RestApiServer;
+
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.*;
@@ -24,6 +29,7 @@ public class Main {
         Flight f1 = new Flight("KC101", 15000);
         Flight f2 = new Flight("KC202", 12000);
 
+
         Passenger p1 = new Passenger("Aibek", 20);
         Passenger p2 = new Passenger("Aibek", 20);
 
@@ -35,9 +41,9 @@ public class Main {
         Passenger found = findPassenger(passengers, "Daryn");
 
         if (found != null) {
-            System.out.println("Found Passenger: " + found.getName() + ",age:" + found.getAge());
+            System.out.println("Found com.airline.portal.domain.Passenger: " + found.getName() + ",age:" + found.getAge());
         } else {
-            System.out.println("Passenger not found");
+            System.out.println("com.airline.portal.domain.Passenger not found");
         }
 
         ArrayList<Passenger> adults = filterAdults(passengers);
@@ -54,7 +60,6 @@ public class Main {
                     flight.getNumber() + " - " + flight.getPrice()
             );
         }
-
 
         ArrayList<Identifiable> people = new ArrayList<>();
         people.add(new Passenger("Ali",40));

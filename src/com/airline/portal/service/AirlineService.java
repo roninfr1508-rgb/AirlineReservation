@@ -1,6 +1,11 @@
+package com.airline.portal.service;
+
+import com.airline.portal.config.DBConnection;
+import com.airline.portal.domain.Flight;
+import com.airline.portal.domain.Passenger;
 import com.airline.portal.exception.InvalidData;
 import com.airline.portal.exception.ResourceNotFound;
-
+import com.airline.portal.domain.Booking;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,24 +63,41 @@ public class AirlineService {
     }
 
     /**
-     * Добавить новый рейс
+     * Добавить новый рейс 4 ПУНКТ
      */
-    public void addFlight(Flight flight)throws InvalidData {
-        if (flight != null && !flights.contains(flight)) {
+    public void addFlight(Flight flight) throws InvalidData {
+        if (flight == null) {
+            throw new InvalidData("Рейс не может быть null");
+        }
+
+        if (flight.getNumber() == null || flight.getNumber().trim().isEmpty()) {
+            throw new InvalidData("Номер рейса не может быть пустым");
+        }
+
+        if (flight.getPrice() <= 0) {
+            throw new InvalidData("Цена рейса должна быть больше 0");
+        }
+
+        if (!flights.contains(flight)) {
             flights.add(flight);
-            // Сохраняем в БД
             dbConnection.saveFlight(flight);
         }
     }
 
     /**
-     * Получить рейс по номеру
+     * Получить рейс по номеру 4 ПУНКТ
      */
-    public Flight getFlightByNumber(String flightNumber) {
+    public Flight getFlightByNumber(String flightNumber) throws ResourceNotFound, InvalidData {
+        if (flightNumber == null || flightNumber.trim().isEmpty()) {
+            throw new InvalidData("Номер рейса не может быть пустым");
+        }
+
         return flights.stream()
                 .filter(f -> f.getNumber().equals(flightNumber))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFound("Рейс с номером " + flightNumber + " не найден"));
+
+
     }
 
     /**
@@ -131,18 +153,14 @@ public class AirlineService {
     /**
      * Получить бронирования по имени пассажира
      */
-    public List<Booking> getBookingsByPassengerName(String passengerName) {
-        return bookings.stream()
-                .filter(b -> b.passenger.getName().equalsIgnoreCase(passengerName))
-                .collect(Collectors.toList());
-    }
+
 
     /**
      * Получить бронирования по номеру рейса
      */
     public List<Booking> getBookingsByFlightNumber(String flightNumber) {
         return bookings.stream()
-                .filter(b -> b.flight.getNumber().equals(flightNumber))
+                .filter(b -> b.getFlight().getNumber().equals(flightNumber))
                 .collect(Collectors.toList());
     }
 
@@ -153,8 +171,8 @@ public class AirlineService {
         if (booking == null) return;
 
         for (int i = 0; i < bookings.size(); i++) {
-            if (bookings.get(i).passenger.getName().equals(booking.passenger.getName()) &&
-                    bookings.get(i).flight.getNumber().equals(booking.flight.getNumber())) {
+            if (bookings.get(i).getPassenger().getName().equals(booking.getPassenger().getName()) &&
+                    bookings.get(i).getFlight().getNumber().equals(booking.getFlight().getNumber())) {
                 bookings.set(i, booking);
                 dbConnection.updateBooking(booking);
                 break;
@@ -167,8 +185,8 @@ public class AirlineService {
      */
     public void deleteBooking(String passengerName, String flightNumber) {
         bookings.removeIf(b ->
-                b.passenger.getName().equalsIgnoreCase(passengerName) &&
-                        b.flight.getNumber().equals(flightNumber)
+                b.getPassenger().getName().equalsIgnoreCase(passengerName) &&
+                        b.getFlight().getNumber().equals(flightNumber)
         );
         dbConnection.deleteBooking(passengerName + "-" + flightNumber);
     }
@@ -183,24 +201,39 @@ public class AirlineService {
     }
 
     /**
-     * Добавить нового пассажира
+     * Добавить нового пассажира  4 ПУНКТ
      */
-    public void addPassenger(Passenger passenger) {
-        if (passenger != null && !passengers.contains(passenger)) {
+    public void addPassenger(Passenger passenger) throws InvalidData {
+        if (passenger == null) {
+            throw new InvalidData("Пассажир не может быть null");
+        }
+
+        if (passenger.getName() == null || passenger.getName().trim().isEmpty()) {
+            throw new InvalidData("Имя пассажира не может быть пустым");
+        }
+
+        if (passenger.getAge() < 0 || passenger.getAge() > 100) {
+            throw new InvalidData("Возраст должен быть от 0 до 100");
+        }
+
+        if (!passengers.contains(passenger)) {
             passengers.add(passenger);
-            // Сохраняем в БД
             dbConnection.savePassenger(passenger);
         }
     }
 
     /**
-     * Получить пассажира по имени
+     * Получить пассажира по имени 4 ПУНКТ
      */
-    public Passenger getPassengerByName(String name) {
+    public Passenger getPassengerByName(String name) throws ResourceNotFound, InvalidData {
+        if (name == null || name.trim().isEmpty()) {
+            throw new InvalidData("Имя пассажира не может быть пустым");
+        }
+
         return passengers.stream()
                 .filter(p -> p.getName().equalsIgnoreCase(name))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFound("Пассажир с именем " + name + " не найден"));
     }
 
     /**
@@ -271,17 +304,22 @@ public class AirlineService {
     }
 
     /**
-     * Создать бронирование
+     * Создать бронирование  4 ПУНКТ
      */
-    public Booking createBooking(String passengerName, String flightNumber) {
+    public Booking createBooking(String passengerName, String flightNumber) throws InvalidData, ResourceNotFound {
+        if (passengerName == null || passengerName.trim().isEmpty()) {
+            throw new InvalidData("Имя пассажира не может быть пустым");
+        }
+
+        if (flightNumber == null || flightNumber.trim().isEmpty()) {
+            throw new InvalidData("Номер рейса не может быть пустым");
+        }
+
         Passenger passenger = getPassengerByName(passengerName);
         Flight flight = getFlightByNumber(flightNumber);
 
-        if (passenger != null && flight != null) {
-            Booking booking = new Booking(flight, passenger);
-            addBooking(booking);
-            return booking;
-        }
-        return null;
+        Booking booking = new Booking(flight, passenger);
+        addBooking(booking);
+        return booking;
     }
 }

@@ -2,7 +2,7 @@
 
 ## Project Description
 This project is a simple Java application that demonstrates Object-Oriented Programming principles.  
-The system works with people data (Passenger, Student) and shows how abstraction, inheritance, encapsulation, and polymorphism are applied.  
+The system works with people data (com.airline.portal.domain.Passenger, Student) and shows how abstraction, inheritance, encapsulation, and polymorphism are applied.  
 The project also includes searching, filtering, and basic data handling using collections.
 
 ## ▶️ How to Run the Project
@@ -14,10 +14,10 @@ The project also includes searching, filtering, and basic data handling using co
 
 
  ## Implemented Assignment Requirements
- 1.Data abstraction (abstract class `Person`, interface `Identifiable`)
+ 1.Data abstraction (abstract class `com.airline.portal.domain.Person`, interface `com.airline.portal.domain.Identifiable`)
  2.Encapsulation (private fields, getters and setters)
- 3.Inheritance (`Passenger` extends `Person`)
- 4.Polymorphism (using `Identifiable` interface and method overriding)
+ 3.Inheritance (`com.airline.portal.domain.Passenger` extends `com.airline.portal.domain.Person`)
+ 4.Polymorphism (using `com.airline.portal.domain.Identifiable` interface and method overriding)
  5. Organizing data using collections (`ArrayList`)
  6.Searching data (find passenger by name)
  7.Filtering data (filter passengers by age)
